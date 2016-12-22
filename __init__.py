@@ -46,6 +46,9 @@ class Orbital:
 		self.TT_RADIUS = 0.0
 		self.tt_origin = (0.0, 0.0, 0.0)
 
+	def calculateRadius(self):
+		rdSquared = math.pow((self.TT_POSITION[0] - self.tt_origin[0]), 2) + math.pow((self.TT_POSITION[1] - self.tt_origin[1]), 2)+ math.pow((self.TT_POSITION[2] - self.tt_origin[2]), 2)
+		self.TT_RADIUS = math.sqrt(rdSquared)
 
 	def setToFrontview(self, camera):
 		'''sets camera of choice to a directly front view position (assuming "Front" is negative Y)
