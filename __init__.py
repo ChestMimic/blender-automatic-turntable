@@ -44,6 +44,7 @@ class Orbital:
 		self.TT_ROTATION_Y = 0.0
 		self.TT_ROTATION_Z = 0.0
 		self.TT_RADIUS = 0.0
+		self.tt_origin = (0.0, 0.0, 0.0)
 
 
 	def setToFrontview(self, camera):
