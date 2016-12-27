@@ -44,7 +44,11 @@ class Orbital:
 		self.TT_ROTATION_Y = 0.0
 		self.TT_ROTATION_Z = 0.0
 		self.TT_RADIUS = 0.0
+
+
 		self.tt_origin = (0.0, 0.0, 0.0)
+		#Radius, azimuth, polar angle
+		self.tt_spherical_coords = (0.0, 0.0, 0.0) 
 
 	def calculateRadius(self):
 		rdSquared = math.pow((self.TT_POSITION[0] - self.tt_origin[0]), 2) + math.pow((self.TT_POSITION[1] - self.tt_origin[1]), 2)+ math.pow((self.TT_POSITION[2] - self.tt_origin[2]), 2)
