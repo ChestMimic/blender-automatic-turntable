@@ -30,6 +30,8 @@ import math
 import mathutils
 from math import radians
 
+from . import RadialPoints
+
 class Orbital:
 	'''Orbital class contains variables and functions for positioning and rotating camera around a model
 		'''
@@ -44,15 +46,7 @@ class Orbital:
 		self.TT_ROTATION_Y = 0.0
 		self.TT_ROTATION_Z = 0.0
 		self.TT_RADIUS = 0.0
-
-
-		self.tt_origin = (0.0, 0.0, 0.0)
-		#Radius, azimuth, polar angle
-		self.tt_spherical_coords = (0.0, 0.0, 0.0) 
-
-	def calculateRadius(self):
-		rdSquared = math.pow((self.TT_POSITION[0] - self.tt_origin[0]), 2) + math.pow((self.TT_POSITION[1] - self.tt_origin[1]), 2)+ math.pow((self.TT_POSITION[2] - self.tt_origin[2]), 2)
-		self.TT_RADIUS = math.sqrt(rdSquared)
+		self.tt_orbit = RadialPoints.CircularPositioning()
 
 	def setToFrontview(self, camera):
 		'''sets camera of choice to a directly front view position (assuming "Front" is negative Y)
@@ -63,6 +57,9 @@ class Orbital:
 		camera.rotation_euler = (radians(self.TT_ROTATION_X), 0.0, 0.0)
 		#reposition camera to fit selected items
 		bpy.ops.view3d.camera_to_view_selected()
+		rads = self.tt_orbit.radiusToPoint(camera.location)
+		self.tt_orbit.tt_circular_coords = [rads, 270]
+
 		self.TT_POSITION = camera.location
 		self.TT_RADIUS = camera.location[1]	#currently, Y coordinate == radius
 
@@ -80,6 +77,10 @@ class Orbital:
 			self.TT_ROTATION_Z = self.TT_ROTATION_Z + self.TT_ANGLE_INCREMENTS
 			camera.rotation_euler = (radians(self.TT_ROTATION_X), 0.0, radians(self.TT_ROTATION_Z))
 			#Set position
+			self.tt_orbit.addToAngle(self.TT_ANGLE_INCREMENTS)
+			sampPos = self.tt_orbit.getPointXYZ()
+			print(sampPos)
+
 			self.TT_POSITION[0] = (self.TT_RADIUS * math.cos(radians(self.TT_ROTATION_Z+self.TT_ANGLE_INCREMENTS)))
 			self.TT_POSITION[1] =  (self.TT_RADIUS * math.sin(radians(self.TT_ROTATION_Z+self.TT_ANGLE_INCREMENTS)))
 			camera.location= mathutils.Vector(self.TT_POSITION)
