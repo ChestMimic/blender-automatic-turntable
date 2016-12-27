@@ -19,7 +19,7 @@
 bl_info = {
 	"name":"Automatic Turntable",
 	"description":"Automatically focus camera to rotate around a selected object in a scene",
-	"version":(1,0),
+	"version":(0,1),
 	"blender":(2,78,0),
 	"support":"TESTING",
 	"category":"Render",
@@ -39,6 +39,7 @@ class Orbital:
 		self.TT_FILEPATH_ROOT = "/tmp\\"
 		self.TT_FILEPATH_ITERATOR = "1"
 		self.TT_FILEPATH_EXT  =".png"
+
 		self.TT_ANGLE_INCREMENTS = 90
 		self.TT_POSITION = (0.0, -5.0, 0.0)	#Camera should be in front (Neg-Y) of model
 
