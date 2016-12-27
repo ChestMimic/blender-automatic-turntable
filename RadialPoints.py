@@ -3,9 +3,9 @@ import mathutils
 from math import radians
 
 class CircularPositioning:
-	def __init__(self):
+	def __init__(self, orig = (0.0, 0.0, 0.0)):
 		self.tt_circular_coords = [0.0, 0.0] 
-		self.tt_origin = (0.0, 0.0, 0.0)
+		self.tt_origin = orig
 
 	def radiusToPoint(self, xyzTuple = (0, 0, 0)):
 		if (self.tt_origin == xyzTuple):

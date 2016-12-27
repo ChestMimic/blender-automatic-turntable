@@ -41,63 +41,63 @@ class Orbital:
 		self.TT_FILEPATH_EXT  =".png"
 		self.TT_ANGLE_INCREMENTS = 90
 		self.TT_POSITION = (0.0, -5.0, 0.0)	#Camera should be in front (Neg-Y) of model
-		self.TT_TARGET_VIEW = (0.0, 0.0, 0.0)	#Default viewpoint to origin
+
 		self.TT_ROTATION_X = 90.0
 		self.TT_ROTATION_Y = 0.0
 		self.TT_ROTATION_Z = 0.0
-		self.TT_RADIUS = 0.0
+
 		self.tt_orbit = RadialPoints.CircularPositioning()
+		self.tt_iterations = 3
 
 	def setToFrontview(self, camera):
-		'''sets camera of choice to a directly front view position (assuming "Front" is negative Y)
+		'''sets camera of choice to a directly front view position (assuming "Front" is theta=270 degrees)
 			camera -- Camera object to be positioned
 			'''
 		#Move camera front and center
 		camera.location = self.TT_POSITION
 		camera.rotation_euler = (radians(self.TT_ROTATION_X), 0.0, 0.0)
+
 		#reposition camera to fit selected items
 		bpy.ops.view3d.camera_to_view_selected()
 		rads = self.tt_orbit.radiusToPoint(camera.location)
 		self.tt_orbit.tt_circular_coords = [rads, 270]
 
-		self.TT_POSITION = camera.location
-		self.TT_RADIUS = camera.location[1]	#currently, Y coordinate == radius
-
 	def renderOrbit(self, camera):
 		'''Iterate tghrough radial steps and render at position
 			camera -- Camera object to perform on
 			'''
-		while(self.TT_ROTATION_Z < 270):
+		while(self.tt_iterations >0):
 			#Take render
-			print("Camera at (" +str(self.TT_POSITION[0]) +"," + str(self.TT_POSITION[1]) +"," + str(self.TT_POSITION[2])  +")" )
-			print("Camera heading: " + str(self.TT_ROTATION_Z))
+			#print("Iteration #" + str(self.tt_iterations))
 			bpy.data.scenes['Scene'].render.filepath = self.TT_FILEPATH_ROOT + self.TT_FILEPATH_ITERATOR + self.TT_FILEPATH_EXT
 			bpy.ops.render.render( write_still=True ) 
+
+			#Rotate camera
 			self.TT_FILEPATH_ITERATOR = str(int(self.TT_FILEPATH_ITERATOR)+1)
 			self.TT_ROTATION_Z = self.TT_ROTATION_Z + self.TT_ANGLE_INCREMENTS
 			camera.rotation_euler = (radians(self.TT_ROTATION_X), 0.0, radians(self.TT_ROTATION_Z))
-			#Set position
+			
+			#Set camera position
 			self.tt_orbit.addToAngle(self.TT_ANGLE_INCREMENTS)
 			sampPos = self.tt_orbit.getPointXYZ()
-			print(sampPos)
-
-			self.TT_POSITION[0] = (self.TT_RADIUS * math.cos(radians(self.TT_ROTATION_Z+self.TT_ANGLE_INCREMENTS)))
-			self.TT_POSITION[1] =  (self.TT_RADIUS * math.sin(radians(self.TT_ROTATION_Z+self.TT_ANGLE_INCREMENTS)))
-			camera.location= mathutils.Vector(self.TT_POSITION)
-			#bpy.ops.mesh.primitive_cube_add(location=self.TT_POSITION) 
+			camera.location= mathutils.Vector(sampPos)
+			self.tt_iterations -= 1
+		
 
 class OrbitalOperator(bpy.types.Operator):
 	'''Class to interface with blender python
 		'''	
-	bl_idname = "object.automatic_turntable"    #id name
+	bl_idname = "render.automatic_turntable"    #id name
 	bl_label = "Orbit selected object and render"        #Display Label
 	bl_options = {"REGISTER"}       #Possible operations
 
 	def execute(self, context):
+		print("Execute Script: Automatic Turntable")
 		obj_cam = bpy.data.objects["Camera"]
 		orbit = Orbital()
 		orbit.setToFrontview(obj_cam)
 		orbit.renderOrbit(obj_cam)
+		print("End Script: Automatic Turntable")
 		return {"FINISHED"}
 
 def register():
