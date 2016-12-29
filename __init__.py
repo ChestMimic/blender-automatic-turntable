@@ -102,6 +102,7 @@ class Orbital:
 
 		#reposition camera to fit selected items
 		bpy.ops.view3d.camera_to_view_selected()
+		camera.location = (camera.location[0], camera.location[1]+ (camera.location[1]*.1), camera.location[2])
 		rads = self.tt_orbit.radiusToPoint(camera.location)
 		self.tt_orbit.tt_circular_coords = [rads, 270]
 		print("Orbiting around: " + str(self.tt_orbit.tt_origin) )
