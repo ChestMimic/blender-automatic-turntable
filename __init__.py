@@ -110,6 +110,10 @@ class Orbital:
 		'''Iterate tghrough radial steps and render at position
 			camera -- Camera object to perform on
 			'''
+		#Removes first render jitter
+		sampPos = self.tt_orbit.getPointXYZ()
+		camera.location= mathutils.Vector(sampPos)
+
 		while(self.tt_iterations >0):
 			#Take render
 			#print("Iteration #" + str(self.tt_iterations))
