@@ -28,14 +28,54 @@ bl_info = {
 import bpy
 import math
 import mathutils
+from mathutils import Vector
 from math import radians
 
 from . import RadialPoints
 
+
+class BoundingBox:
+	def __init__(self, lst=[]):
+		self.xMin = None
+		self.xMax = None
+		self.yMin = None
+		self.yMax = None
+		self.zMin = None
+		self.zMax = None
+
+		print("RUN")
+		#Obtain bounding box in an object's local space
+		for ob in lst:
+			loc = ob.location
+			for b in ob.bound_box:
+				if self.xMax is None or ((Vector(b)[0] + ob.location[0]) > self.xMax):
+					self.xMax = Vector(b)[0] + ob.location[0]
+				if self.xMin is None or ((Vector(b)[0] + ob.location[0]) < self.xMin):
+					self.xMin = Vector(b)[0] + ob.location[0]
+
+				if self.yMax is None or ((Vector(b)[1] + ob.location[1]) > self.yMax) :
+					self.yMax = Vector(b)[1] + ob.location[1]
+				if self.yMin is None or ((Vector(b)[1] + ob.location[1]) < self.yMin):
+					self.yMin = Vector(b)[1] + ob.location[1]
+
+				if self.zMax is None or ((Vector(b)[2] + ob.location[2]) > self.zMax):
+					self.zMax = Vector(b)[2] + ob.location[2]
+				if self.zMin is None or ((Vector(b)[2] + ob.location[2]) < self.zMin):
+					self.zMin = Vector(b)[2] + ob.location[2]
+
+		self.xMid = (self.xMin + self.xMax)/2
+		self.yMid = (self.yMin + self.yMax)/2
+		self.zMid = (self.zMin + self.zMax)/2
+
+		self.minimum = (self.xMin, self.yMin, self.zMin)
+		self.maximum = (self.xMax, self.yMax, self.zMax)
+		self.midpoint = (self.xMid, self.yMid, self.zMid)
+
+
 class Orbital:
 	'''Orbital class contains variables and functions for positioning and rotating camera around a model
 		'''
-	def __init__(self):
+	def __init__(self, box = None):
 		self.TT_FILEPATH_ROOT = "/tmp\\"
 		self.TT_FILEPATH_ITERATOR = "1"
 		self.TT_FILEPATH_EXT  =".png"
@@ -48,6 +88,8 @@ class Orbital:
 		self.TT_ROTATION_Z = 0.0
 
 		self.tt_orbit = RadialPoints.CircularPositioning()
+		if box is not None:
+			self.tt_orbit.tt_origin = box.midpoint 
 		self.tt_iterations = 3
 
 	def setToFrontview(self, camera):
@@ -60,13 +102,19 @@ class Orbital:
 
 		#reposition camera to fit selected items
 		bpy.ops.view3d.camera_to_view_selected()
+		camera.location = (camera.location[0], camera.location[1]+ (camera.location[1]*.1), camera.location[2])
 		rads = self.tt_orbit.radiusToPoint(camera.location)
 		self.tt_orbit.tt_circular_coords = [rads, 270]
+		print("Orbiting around: " + str(self.tt_orbit.tt_origin) )
 
 	def renderOrbit(self, camera):
 		'''Iterate tghrough radial steps and render at position
 			camera -- Camera object to perform on
 			'''
+		#Removes first render jitter
+		sampPos = self.tt_orbit.getPointXYZ()
+		camera.location= mathutils.Vector(sampPos)
+
 		while(self.tt_iterations >0):
 			#Take render
 			#print("Iteration #" + str(self.tt_iterations))
@@ -95,8 +143,11 @@ class OrbitalOperator(bpy.types.Operator):
 	def execute(self, context):
 		print("Execute Script: Automatic Turntable")
 		obj_cam = bpy.data.objects["Camera"]
-		orbit = Orbital()
+		box = BoundingBox(bpy.context.selected_objects)
+		print("Box centered at: " + str(box.midpoint))
+		orbit = Orbital(box)
 		orbit.setToFrontview(obj_cam)
+		print("camera starting at: " + str(obj_cam.location))
 		orbit.renderOrbit(obj_cam)
 		print("End Script: Automatic Turntable")
 		return {"FINISHED"}
