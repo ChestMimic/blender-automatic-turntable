@@ -23,7 +23,7 @@ bl_info = {
 	"blender":(2,78,0),
 	"support":"TESTING",
 	"category":"Render",
-	"author":"ibbolia"
+	"author":"Mark Fitzgibbon"
 }
 import bpy
 
