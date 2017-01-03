@@ -1,7 +1,7 @@
 #Change Log
 All notable changes will be tracked in this file
 
-##[Unreleased]
+##[0.2] - 2016-12-28
 ###Added
 - RadialPoints.py file for determining position of camera during calculations
 	-Some code exists for using spherical coordinates. It is not functional.
