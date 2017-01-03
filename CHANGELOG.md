@@ -1,6 +1,13 @@
 #Change Log
 All notable changes will be tracked in this file
 
+##[Unreleased]
+###Changed
+- Classes seperated into individual files
+
+###Removed
+- addon_menu.py: according to bpy documentation, this is the intent of an init file
+
 ##[0.2] - 2016-12-28
 ###Added
 - RadialPoints.py file for determining position of camera during calculations

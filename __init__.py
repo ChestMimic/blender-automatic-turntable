@@ -1,6 +1,6 @@
 # BEGIN GPL BLOCK    
-#    Blender Renderwatch monitors the status of the Render operation
-#    Copyright (C) 2016  Mark Fitzgibbon
+#    Batch renders around selection to create turntable frames
+#    Copyright (C) 2017  Mark Fitzgibbon
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
