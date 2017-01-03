@@ -26,7 +26,6 @@ bl_info = {
 	"author":"ibbolia"
 }
 import bpy
-import math
 import mathutils
 from mathutils import Vector
 from math import radians
@@ -46,7 +45,6 @@ class BoundingBox:
 		print("RUN")
 		#Obtain bounding box in an object's local space
 		for ob in lst:
-			loc = ob.location
 			for b in ob.bound_box:
 				if self.xMax is None or ((Vector(b)[0] + ob.location[0]) > self.xMax):
 					self.xMax = Vector(b)[0] + ob.location[0]
