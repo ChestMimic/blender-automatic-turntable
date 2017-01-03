@@ -1,5 +1,4 @@
 import math
-import mathutils
 from math import radians
 
 class CircularPositioning:
