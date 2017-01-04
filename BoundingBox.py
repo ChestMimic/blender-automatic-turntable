@@ -14,7 +14,7 @@ class BoundingBox:
 			for b in ob.bound_box:
 				loc, rot, scale = ob.matrix_world.decompose();
 
-				globalPos = lambda i: Vector(b)[i] + loc[i]
+				globalPos = lambda i: (Vector(b)[i])*scale[i] + loc[i]
 
 				if xMax is None or (globalPos(0) > xMax):
 					xMax = globalPos(0)
