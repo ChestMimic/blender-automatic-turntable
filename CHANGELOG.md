@@ -8,6 +8,10 @@ All notable changes will be tracked in this file
 ###Removed
 - addon_menu.py: according to bpy documentation, this is the intent of an init file
 
+###Known Issues
+- Global rotation is not accounted for in Bounding Box calculation
+ - Suggested workaround: Apply transformations to all target objects first
+
 ##[0.2] - 2016-12-28
 ###Added
 - RadialPoints.py file for determining position of camera during calculations
