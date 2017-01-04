@@ -1,7 +1,7 @@
 from mathutils import Vector
 
 class BoundingBox:
-	def __init__(self, lst=[]):
+	def __init__(self, lst=[], globalPos = (0.0,0.0,0.0)):
 		self.xMin = None
 		self.xMax = None
 		self.yMin = None
@@ -12,6 +12,8 @@ class BoundingBox:
 		#Obtain bounding box in an object's local space
 		for ob in lst:
 			for b in ob.bound_box:
+				print(ob.location)
+
 				if self.xMax is None or ((Vector(b)[0] + ob.location[0]) > self.xMax):
 					self.xMax = Vector(b)[0] + ob.location[0]
 				if self.xMin is None or ((Vector(b)[0] + ob.location[0]) < self.xMin):
