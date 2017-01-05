@@ -38,10 +38,6 @@ Addon will iterate through front, side(Right), and rear view posiions.
 
 Significant Known Issues
 ------------
-- 5: Unusual Bounding Box recognition
-	- Addresses incorrect calculation of global transforms
-	- Global Scale confirmed fixed, Rotation is not
-	- Suggested temporary Workaround: Apply object transformations
 - 6: Object with too much Y length cropped
 	- Addresses issue caused by Y length exceeding X length
 	- Suggested temporary workaround: No known workaround exists at this time

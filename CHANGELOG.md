@@ -1,6 +1,13 @@
 #Change Log
 All notable changes will be tracked in this file
 
+##[Unreleased]
+###Fixed
+- Issue 5: Transforms no longer negatively affect render fitting
+
+###Changed
+- Bounding Box calculation now uses matrices directly on values
+
 ##[0.2.1] - 2017-01-04 
 ###Fixed
 - Script is now able to account for global scale values of objects when determining bounds (Issue #5)
