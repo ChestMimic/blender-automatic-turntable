@@ -1,6 +1,22 @@
 #Change Log
 All notable changes will be tracked in this file
 
+##[0.2.1] - 2017-01-04 
+###Fixed
+- Script is now able to account for global scale values of objects when determining bounds (Issue #5)
+
+###Added
+- Significan Known Issues section to readme
+
+###Changed
+- Classes seperated into individual files
+- Modified specific methodology of corner calculation in BoundingBox.py
+- (Above) Added Global Scale to calculation method for an individual bounding box
+- Date markings in Readme
+
+###Removed
+- addon_menu.py: according to bpy documentation, this is the intent of an init file
+
 ##[0.2] - 2016-12-28
 ###Added
 - RadialPoints.py file for determining position of camera during calculations
