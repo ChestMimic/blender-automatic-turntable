@@ -10,7 +10,8 @@ All notable changes will be tracked in this file
 
 ###Known Issues
 - Global rotation is not accounted for in Bounding Box calculation
- - Suggested workaround: Apply transformations to all target objects first
+	- Suggested workaround: Apply transformations to all target objects first
+- When one axis is significanlt larger than Y, the radius does not properly orbit
 
 ##[0.2] - 2016-12-28
 ###Added
