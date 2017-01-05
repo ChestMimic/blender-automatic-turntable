@@ -39,9 +39,9 @@ class OrbitalOperator(bpy.types.Operator):
 	def execute(self, context):
 		print("Execute Script: Automatic Turntable")
 		obj_cam = bpy.data.objects["Camera"]
-		box = BoundingBox(bpy.context.selected_objects)
+		box = BoundingBox.BoundingBox(bpy.context.selected_objects)
 		print("Box centered at: " + str(box.midpoint))
-		orbit = Orbital(box)
+		orbit = Orbital.Orbital(box)
 		orbit.setToFrontview(obj_cam)
 		print("camera starting at: " + str(obj_cam.location))
 		orbit.renderOrbit(obj_cam)
