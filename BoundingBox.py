@@ -12,9 +12,10 @@ class BoundingBox:
 		#Obtain bounding box in an object's local space
 		for ob in lst:
 			for b in ob.bound_box:
-				loc, rot, scale = ob.matrix_world.decompose();
+				mat = ob.matrix_world
+				#loc, rot, scale = ob.matrix_world.decompose();
 
-				globalPos = lambda i: (Vector(b)[i])*scale[i] + loc[i]
+				globalPos = lambda i: (Vector(b)*mat)[i]
 
 				if xMax is None or (globalPos(0) > xMax):
 					xMax = globalPos(0)
