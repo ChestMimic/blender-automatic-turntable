@@ -38,6 +38,22 @@ class Orbital:
 		self.tt_orbit.tt_circular_coords = [rads, 270]
 		print("Orbiting around: " + str(self.tt_orbit.tt_origin) )
 
+	def catchRender(self, camera):
+		bpy.data.scenes['Scene'].render.filepath = self.TT_FILEPATH_ROOT + self.TT_FILEPATH_ITERATOR + self.TT_FILEPATH_EXT
+		bpy.ops.render.render( write_still=True ) 
+		self.TT_FILEPATH_ITERATOR = str(int(self.TT_FILEPATH_ITERATOR)+1)
+
+	def setCameraToNextInc(self, camera  ):
+		sampPos = self.tt_orbit.getPointXYZ()
+		
+		self.TT_ROTATION_Z = self.TT_ROTATION_Z + self.TT_ANGLE_INCREMENTS
+		camera.rotation_euler = (radians(self.TT_ROTATION_X), 0.0, radians(self.TT_ROTATION_Z))
+		
+		#Set camera position
+		self.tt_orbit.addToAngle(self.TT_ANGLE_INCREMENTS)
+		sampPos = self.tt_orbit.getPointXYZ()
+		camera.location= mathutils.Vector(sampPos)
+
 	def renderOrbit(self, camera):
 		'''Iterate tghrough radial steps and render at position
 			camera -- Camera object to perform on
@@ -49,17 +65,9 @@ class Orbital:
 		while(self.tt_iterations >0):
 			#Take render
 			#print("Iteration #" + str(self.tt_iterations))
-			bpy.data.scenes['Scene'].render.filepath = self.TT_FILEPATH_ROOT + self.TT_FILEPATH_ITERATOR + self.TT_FILEPATH_EXT
-			bpy.ops.render.render( write_still=True ) 
+			self.catchRender(camera)
 
 			#Rotate camera
-			self.TT_FILEPATH_ITERATOR = str(int(self.TT_FILEPATH_ITERATOR)+1)
-			self.TT_ROTATION_Z = self.TT_ROTATION_Z + self.TT_ANGLE_INCREMENTS
-			camera.rotation_euler = (radians(self.TT_ROTATION_X), 0.0, radians(self.TT_ROTATION_Z))
-			
-			#Set camera position
-			self.tt_orbit.addToAngle(self.TT_ANGLE_INCREMENTS)
-			sampPos = self.tt_orbit.getPointXYZ()
-			camera.location= mathutils.Vector(sampPos)
+			self.setCameraToNextInc(camera)
 			self.tt_iterations -= 1
 	
