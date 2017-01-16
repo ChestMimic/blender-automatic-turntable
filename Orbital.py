@@ -66,8 +66,9 @@ class Orbital:
 			#Take render
 			#print("Iteration #" + str(self.tt_iterations))
 			self.catchRender(camera)
-
-			#Rotate camera
-			self.setCameraToNextInc(camera)
 			self.tt_iterations -= 1
+			if(self.tt_iterations is not 0):
+				#Rotate camera
+				self.setCameraToNextInc(camera)
+			
 	

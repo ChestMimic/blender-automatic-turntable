@@ -1,6 +1,10 @@
 #Change Log
 All notable changes will be tracked in this file
 
+##[Unreleased]
+###Fixed
+- Issue 8: Camera rotation points now do not exceed final position
+
 ##[0.2.2] - 2017-01-05
 ###Fixed
 - Issue 5: Transforms no longer negatively affect render fitting
