@@ -19,7 +19,7 @@
 bl_info = {
 	"name":"Automatic Turntable",
 	"description":"Automatically focus camera to rotate around a selected object in a scene",
-	"version":(0,2,1),
+	"version":(0,2,2),
 	"blender":(2,78,0),
 	"support":"TESTING",
 	"category":"Render",

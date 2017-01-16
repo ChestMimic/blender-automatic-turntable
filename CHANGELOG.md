@@ -1,7 +1,7 @@
 #Change Log
 All notable changes will be tracked in this file
 
-##[Unreleased]
+##[0.2.2] - 2017-01-05
 ###Fixed
 - Issue 5: Transforms no longer negatively affect render fitting
 
