@@ -59,6 +59,11 @@ class Orbital:
 			camera -- Camera object to perform on
 			'''
 		#Removes first render jitter
+		if camera is not bpy.context.scene.camera:
+			print("Setting camera: " + camera)
+			bpy.context.scene.camera = camera
+
+
 		sampPos = self.tt_orbit.getPointXYZ()
 		camera.location= mathutils.Vector(sampPos)
 

@@ -1,9 +1,10 @@
 #Change Log
 All notable changes will be tracked in this file
 
-##[Unreleased]
+##[0.2.3] - 2017-01-16
 ###Fixed
-- Issue 8: Camera rotation points now do not exceed final position
+- Issue 7: Camera rotation points now do not exceed final position
+- Issue 8: Utilizes camera defined in script instead of active camera
 
 ##[0.2.2] - 2017-01-05
 ###Fixed
