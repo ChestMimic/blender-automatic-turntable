@@ -1,6 +1,6 @@
 Automatic Turntable Addon
 ================
-Version 0.2.2
+Version 0.2.3
 -----------
 (c) Mark Fitzgibbon 2017
 
