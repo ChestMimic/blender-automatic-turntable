@@ -1,6 +1,11 @@
 #Change Log
 All notable changes will be tracked in this file
 
+##[Unreleased]
+###Added
+- AutomaticTurntableOperator class
+- Keymaps variable
+
 ##[0.2.3] - 2017-01-16
 ###Fixed
 - Issue 7: Camera rotation points now do not exceed final position

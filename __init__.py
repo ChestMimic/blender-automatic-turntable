@@ -26,8 +26,34 @@ bl_info = {
 	"author":"Mark Fitzgibbon"
 }
 import bpy
-
+from bpy.props import IntProperty, FloatProperty
 from . import BoundingBox, Orbital
+
+addons_keymap = []
+
+class AutomaticTurntableOperator(bpy.types.Operator):
+	"""docstring for AutomaticTurntableOperator"""
+	bl_idname = "render.automatic_turntable"
+	bl_label = "Automatic Turntable Renders"
+	bl_options = {"REGISTER"}
+
+	#Number of renders to take
+	iterations = IntProperty(
+		name= "Iterations",
+		min = 1,
+		default = 1)
+	#Angle between iterations
+	increments = FloatProperty(
+		name ="Increments",
+		min = 0,
+		max = 360,
+		default = 90
+		)
+
+	def execute(self, context):
+		#Spawn parameters popup
+		return {'FINISHED'}
+
 
 class OrbitalOperator(bpy.types.Operator):
 	'''Class to interface with blender python
