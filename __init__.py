@@ -26,10 +26,38 @@ bl_info = {
 	"author":"Mark Fitzgibbon"
 }
 import bpy
-from bpy.props import IntProperty, FloatProperty
+import mathutils
+from math import radians
+
+from bpy.props import IntProperty, FloatProperty, StringProperty
+
 from . import BoundingBox, Orbital
+from . import RadialPoints
 
 addons_keymap = []
+
+class Turntable:
+
+	def __init__(self, iterations=1, increments=90, camera="", filepath="", position, cam_rot=(90, 0, 0)):
+		self.iterations=iterations
+		self.increments=increments
+		self.camera=camera	#Object of camera (eg bpy.data.objects)
+		self.filepath=filepath
+		self.position=position
+		self.camera_rotation = cam_rot
+		pass
+
+	def initializeCamera(self):
+		#Activate requested camera
+		if self.camera is not bpy.context.scene.camera.name:
+			bpy.context.scene.camera = self.camera
+
+	def renderCurrentPosition(self):
+		bpy.data.scenes['Scene'].render.filepath = self.filepath
+		bpy.ops.render.render( write_still=True )
+
+
+
 
 class AutomaticTurntableOperator(bpy.types.Operator):
 	"""docstring for AutomaticTurntableOperator"""
@@ -49,9 +77,21 @@ class AutomaticTurntableOperator(bpy.types.Operator):
 		max = 360,
 		default = 90
 		)
+	camera = StringProperty(
+		name="Camera")
+	filepath = StringProperty(
+		name="File Path")
+
+	def invoke(self, context, iterations, increments, camera):
+		self.iterations = iterations
+		self.increments = increments
+		self.camera = camera
+		return self.execute(context)
 
 	def execute(self, context):
-		#Spawn parameters popup
+		
+		box = BoundingBox.BoundingBox(bpy.context.selected_objects)
+		ttb=Turntable(self.iterations, self.increments, bpy.data.objects[self.camera], self.filepath, box.midpoint)
 		return {'FINISHED'}
 
 
@@ -74,11 +114,24 @@ class OrbitalOperator(bpy.types.Operator):
 		print("End Script: Automatic Turntable")
 		return {"FINISHED"}
 
+class RenderMenu(bpy.types.Menu):
+	bl_idname="Object_MT_automatic_turntable"
+	bl_label="Automatic Turntable"
+
+	def draw(self, context):
+		layout = self.layout
+
+		layout.operator("render.automatic_turntable", text = "Automatic Turntable")
+
 def register():
-	bpy.utils.register_class(OrbitalOperator)
+	#bpy.utils.register_class(OrbitalOperator)
+	bpy.utils.register_class(AutomaticTurntableOperator)
+	bpy.utils.register_class(RenderMenu)
 
 def unregister():
-	bpy.utils.unregister_class(OrbitalOperator)
+	#bpy.utils.unregister_class(OrbitalOperator)
+	bpy.utils.unregister_class(AutomaticTurntableOperator)
+	bpy.utils.unregister_class(RenderMenu)
 
 if __name__ == "__main__":
 	register()
