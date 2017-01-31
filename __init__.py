@@ -94,7 +94,7 @@ class AutomaticTurntableOperator(bpy.types.Operator):
 	"""docstring for AutomaticTurntableOperator"""
 	bl_idname = "render.automatic_turntable"
 	bl_label = "Automatic Turntable Renders"
-	bl_options = {"REGISTER"}
+	bl_options = {'REGISTER', 'UNDO'}
 
 	#Number of renders to take
 	iterations = IntProperty(
@@ -113,11 +113,11 @@ class AutomaticTurntableOperator(bpy.types.Operator):
 	filepath = StringProperty(
 		name="File Path")
 
-	def invoke(self, context, iterations, increments, camera):
-		self.iterations = iterations
-		self.increments = increments
-		self.camera = camera
-		return self.execute(context)
+	def invoke(self, context, event):
+		#self.iterations = iterations
+		#self.increments = increments
+		#self.camera = camera
+		return context.window_manager.invoke_props_dialog(self)
 
 	def execute(self, context):
 		
@@ -132,7 +132,7 @@ class OrbitalOperator(bpy.types.Operator):
 		'''	
 	bl_idname = "render.automatic_turntable"    #id name
 	bl_label = "Orbit selected object and render"        #Display Label
-	bl_options = {"REGISTER"}       #Possible operations
+	bl_options = {'REGISTER', 'UNDO'}       #Possible operations
 
 	def execute(self, context):
 		print("Execute Script: Automatic Turntable")
