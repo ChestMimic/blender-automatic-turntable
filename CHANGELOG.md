@@ -3,8 +3,15 @@ All notable changes will be tracked in this file
 
 ##[Unreleased]
 ###Added
-- AutomaticTurntableOperator class
+- AutomaticTurntableOperator class (To replace Orbital Operator)
+- Turntable class (To replace Orbital)
 - Keymaps variable
+
+###Changed
+- Register/Unregister takes effect on AutomaticTurntableOperator class
+
+###Removed
+- Active code referencing Orbital class
 
 ##[0.2.3] - 2017-01-16
 ###Fixed

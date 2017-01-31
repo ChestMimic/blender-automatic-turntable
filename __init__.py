@@ -38,24 +38,55 @@ addons_keymap = []
 
 class Turntable:
 
-	def __init__(self, iterations=1, increments=90, camera="", filepath="", position, cam_rot=(90, 0, 0)):
+	def __init__(self, camera, filepath="//render_out",iterations=1, increments=90,  position=(0,0, 0), cam_rot=(90, 0, 0)):
 		self.iterations=iterations
 		self.increments=increments
 		self.camera=camera	#Object of camera (eg bpy.data.objects)
 		self.filepath=filepath
-		self.position=position
+		self.position=position	#Camera XYZ position
 		self.camera_rotation = cam_rot
-		pass
+
+		#Set target center
+		box = BoundingBox.BoundingBox(bpy.context.selected_objects)
+		self.orbit = RadialPoints.CircularPositioning(box.midpoint)
+
+		#Set target radius
+		radius = max(box.maximum[0] - box.midpoint[0], box.maximum[1]-box.midpoint[1]) #Largest of either X or Y value
+		self.orbit.tt_circular_coords = [radius, 270]	#Angle 270 should translate to a Front view
+
+		#List of all camera position/rotation comos in order
+		self.camera_atlas = []
+		flag = self.iterations
+		while(flag > 0):
+			posit = self.orbit.getPointXYZ()	#Location of camera
+			rotat = (radians(self.camera_rotation[0]), radians(self.camera_rotation[1]), radians(self.camera_rotation[2]))
+			self.camera_atlas.append([posit, rotat])
+			self.orbit.addToAngle(self.increments)
+			self.camera_rotation = (self.camera_rotation[0], self.camera_rotation[1], self.camera_rotation[2] + increments)
+			flag -= 1
 
 	def initializeCamera(self):
-		#Activate requested camera
-		if self.camera is not bpy.context.scene.camera.name:
+		#Activate requested camera if it isn't
+		if self.camera is not bpy.context.scene.camera:
 			bpy.context.scene.camera = self.camera
 
 	def renderCurrentPosition(self):
 		bpy.data.scenes['Scene'].render.filepath = self.filepath
 		bpy.ops.render.render( write_still=True )
 
+	def setToIndexAndRender(self, index = 0):
+		#Set position and rotation of camera to position on list at index
+		self.camera.location = mathutils.Vector(self.camera_atlas[index][0])
+		self.camera.rotation_euler = self.camera_atlas[index][1]
+
+		self.renderCurrentPosition()
+
+	def renderAllPositions(self):
+		self.initializeCamera()
+		index = 0
+		for cpos in self.camera_atlas:
+			self.setToIndexAndRender(index)
+			index += 1
 
 
 
@@ -91,7 +122,8 @@ class AutomaticTurntableOperator(bpy.types.Operator):
 	def execute(self, context):
 		
 		box = BoundingBox.BoundingBox(bpy.context.selected_objects)
-		ttb=Turntable(self.iterations, self.increments, bpy.data.objects[self.camera], self.filepath, box.midpoint)
+		ttb=Turntable(bpy.data.objects[self.camera], self.filepath, self.iterations, self.increments,  box.midpoint)
+		ttb.renderAllPositions()
 		return {'FINISHED'}
 
 
