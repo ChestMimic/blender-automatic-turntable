@@ -6,6 +6,7 @@ All notable changes will be tracked in this file
 - AutomaticTurntableOperator class (To replace Orbital Operator)
 - Turntable class (To replace Orbital)
 - Keymaps variable
+- AutomaticTurntableOperator UI via invoke_props_dialog
 
 ###Changed
 - Register/Unregister takes effect on AutomaticTurntableOperator class

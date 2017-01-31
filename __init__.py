@@ -109,14 +109,17 @@ class AutomaticTurntableOperator(bpy.types.Operator):
 		default = 90
 		)
 	camera = StringProperty(
-		name="Camera")
+		name="Camera"
+		)
 	filepath = StringProperty(
 		name="File Path")
 
 	def invoke(self, context, event):
 		#self.iterations = iterations
 		#self.increments = increments
-		#self.camera = camera
+		self.camera =bpy.context.scene.camera.name
+#		self.filepath = bpy.types.RenderSettings.filepath
+
 		return context.window_manager.invoke_props_dialog(self)
 
 	def execute(self, context):
