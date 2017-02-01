@@ -50,9 +50,19 @@ class Turntable:
 		box = BoundingBox.BoundingBox(bpy.context.selected_objects)
 		self.orbit = RadialPoints.CircularPositioning(box.midpoint)
 
-		#Set target radius
+		data_cam = bpy.data.cameras[self.camera.name]
+		focalLength = data_cam.lens
+		box_height = ((box.maximum[2] - box.midpoint[2])+(box.maximum[2] - box.midpoint[2]))
+		box_width_x = ((box.maximum[1] - box.midpoint[1])+(box.maximum[1] - box.midpoint[1]))
+		box_width_y = ((box.maximum[0] - box.midpoint[0])+(box.maximum[0] - box.midpoint[0]))
+
+		sensorHeight = data_cam.sensor_height
+
 		radius = max(box.maximum[0] - box.midpoint[0], box.maximum[1]-box.midpoint[1]) #Largest of either X or Y value
-		self.orbit.tt_circular_coords = [radius, 270]	#Angle 270 should translate to a Front view
+		
+		cam_radius = radius + ((focalLength * box_height*1000 )/sensorHeight)/1000
+
+		self.orbit.tt_circular_coords = [cam_radius, 270]	#Angle 270 should translate to a Front view
 
 		#List of all camera position/rotation comos in order
 		self.camera_atlas = []
@@ -118,7 +128,7 @@ class AutomaticTurntableOperator(bpy.types.Operator):
 		#self.iterations = iterations
 		#self.increments = increments
 		self.camera =bpy.context.scene.camera.name
-#		self.filepath = bpy.types.RenderSettings.filepath
+		self.filepath = bpy.data.scenes['Scene'].render.filepath
 
 		return context.window_manager.invoke_props_dialog(self)
 
