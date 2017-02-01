@@ -11,9 +11,11 @@ All notable changes will be tracked in this file
 ###Changed
 - Register/Unregister takes effect on AutomaticTurntableOperator class
 - Radius calculation now uses camera's focal length and relative size of target
+- Filename string formats and uses correct extension string
 
 ###Removed
 - Active code referencing Orbital class
+- Orbital Operator class
 
 ##[0.2.3] - 2017-01-16
 ###Fixed

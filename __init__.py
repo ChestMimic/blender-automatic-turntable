@@ -19,7 +19,7 @@
 bl_info = {
 	"name":"Automatic Turntable",
 	"description":"Automatically focus camera to rotate around a selected object in a scene",
-	"version":(0,2,2),
+	"version":(0,3,0),
 	"blender":(2,78,0),
 	"support":"TESTING",
 	"category":"Render",
@@ -31,10 +31,24 @@ from math import radians
 
 from bpy.props import IntProperty, FloatProperty, StringProperty
 
-from . import BoundingBox, Orbital
+from . import BoundingBox
 from . import RadialPoints
 
 addons_keymap = []
+
+def fitCameraToBox(camera, box):
+	data_cam = bpy.data.cameras[camera.name]
+	focalLength = data_cam.lens
+
+	box_height = ((box.maximum[2] - box.midpoint[2])+(box.maximum[2] - box.midpoint[2]))
+	box_width_x = ((box.maximum[1] - box.midpoint[1])+(box.maximum[1] - box.midpoint[1]))
+	box_width_y = ((box.maximum[0] - box.midpoint[0])+(box.maximum[0] - box.midpoint[0]))
+
+	sensorWidth = data_cam.sensor_width
+	sensorHeight = data_cam.sensor_height
+
+	cam_radius = ((focalLength * box_height*1000 )/sensorHeight)/1000
+
 
 class Turntable:
 
@@ -81,15 +95,15 @@ class Turntable:
 			bpy.context.scene.camera = self.camera
 
 	def renderCurrentPosition(self):
-		bpy.data.scenes['Scene'].render.filepath = self.filepath
-		bpy.ops.render.render( write_still=True )
+		pass
 
 	def setToIndexAndRender(self, index = 0):
 		#Set position and rotation of camera to position on list at index
 		self.camera.location = mathutils.Vector(self.camera_atlas[index][0])
 		self.camera.rotation_euler = self.camera_atlas[index][1]
 
-		self.renderCurrentPosition()
+		bpy.data.scenes[bpy.context.scene.name].render.filepath = self.filepath + format(index+1, '03d')
+		bpy.ops.render.render( write_still=True )
 
 	def renderAllPositions(self):
 		self.initializeCamera()
@@ -101,7 +115,6 @@ class Turntable:
 
 
 class AutomaticTurntableOperator(bpy.types.Operator):
-	"""docstring for AutomaticTurntableOperator"""
 	bl_idname = "render.automatic_turntable"
 	bl_label = "Automatic Turntable Renders"
 	bl_options = {'REGISTER', 'UNDO'}
@@ -127,8 +140,9 @@ class AutomaticTurntableOperator(bpy.types.Operator):
 	def invoke(self, context, event):
 		#self.iterations = iterations
 		#self.increments = increments
-		self.camera =bpy.context.scene.camera.name
-		self.filepath = bpy.data.scenes['Scene'].render.filepath
+		actScene = bpy.context.scene
+		self.camera =actScene.camera.name
+		self.filepath = bpy.data.scenes[actScene.name].render.filepath
 
 		return context.window_manager.invoke_props_dialog(self)
 
@@ -139,44 +153,22 @@ class AutomaticTurntableOperator(bpy.types.Operator):
 		ttb.renderAllPositions()
 		return {'FINISHED'}
 
-
-class OrbitalOperator(bpy.types.Operator):
-	'''Class to interface with blender python
-		'''	
-	bl_idname = "render.automatic_turntable"    #id name
-	bl_label = "Orbit selected object and render"        #Display Label
-	bl_options = {'REGISTER', 'UNDO'}       #Possible operations
-
-	def execute(self, context):
-		print("Execute Script: Automatic Turntable")
-		obj_cam = bpy.data.objects["Camera"]
-		box = BoundingBox.BoundingBox(bpy.context.selected_objects)
-		print("Box centered at: " + str(box.midpoint))
-		orbit = Orbital.Orbital(box)
-		orbit.setToFrontview(obj_cam)
-		print("camera starting at: " + str(obj_cam.location))
-		orbit.renderOrbit(obj_cam)
-		print("End Script: Automatic Turntable")
-		return {"FINISHED"}
-
-class RenderMenu(bpy.types.Menu):
-	bl_idname="Object_MT_automatic_turntable"
-	bl_label="Automatic Turntable"
-
-	def draw(self, context):
-		layout = self.layout
-
-		layout.operator("render.automatic_turntable", text = "Automatic Turntable")
-
+def addToRenderMenu(self, context):
+	self.layout.operator(
+		AutomaticTurntableOperator.bl_idname,
+		text = "Brick"
+		)
 def register():
 	#bpy.utils.register_class(OrbitalOperator)
 	bpy.utils.register_class(AutomaticTurntableOperator)
-	bpy.utils.register_class(RenderMenu)
+	bpy.types.INFO_MT_render.append(addToRenderMenu)
+
+
 
 def unregister():
 	#bpy.utils.unregister_class(OrbitalOperator)
 	bpy.utils.unregister_class(AutomaticTurntableOperator)
-	bpy.utils.unregister_class(RenderMenu)
+	bpy.types.INFO_MT_render.remove(addToRenderMenu)
 
 if __name__ == "__main__":
 	register()
