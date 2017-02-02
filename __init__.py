@@ -60,13 +60,12 @@ def fitCameraToBox(camera, box, margin = 0.0):
 
 class Turntable:
 
-	def __init__(self, camera, filepath="//render_out",iterations=1, increments=90,  position=(0,0, 0), cam_rot=(90, 0, 0)):
+	def __init__(self, camera, filepath="//render_out",iterations=1, increments=90 ):
 		self.iterations=iterations
 		self.increments=increments
 		self.camera=camera	#Object of camera (eg bpy.data.objects)
 		self.filepath=filepath
-		self.position=position	#Camera XYZ position
-		self.camera_rotation = cam_rot
+		self.camera_rotation = (90, 0, 0)
 
 		#Set target center
 		box = BoundingBox.BoundingBox(bpy.context.selected_objects)
@@ -90,7 +89,6 @@ class Turntable:
 		#Activate requested camera if it isn't
 		if self.camera is not bpy.context.scene.camera:
 			bpy.context.scene.camera = self.camera
-
 
 	def setToIndexAndRender(self, index = 0):
 		#Set position and rotation of camera to position on list at index
@@ -143,11 +141,9 @@ class AutomaticTurntableOperator(bpy.types.Operator):
 		actScene = bpy.context.scene
 		self.camera =actScene.camera.name
 		self.filepath = bpy.data.scenes[actScene.name].render.filepath
-
 		return context.window_manager.invoke_props_dialog(self)
 
 	def execute(self, context):
-		
 		box = BoundingBox.BoundingBox(bpy.context.selected_objects)
 		ttb=Turntable(bpy.data.objects[self.camera], self.filepath, self.iterations, self.increments,  box.midpoint)
 		ttb.renderAllPositions()
