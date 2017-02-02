@@ -23,6 +23,7 @@ bl_info = {
 	"blender":(2,78,0),
 	"support":"TESTING",
 	"category":"Render",
+	"location":"Render",
 	"author":"Mark Fitzgibbon"
 }
 #Python imports
@@ -152,7 +153,7 @@ class AutomaticTurntableOperator(bpy.types.Operator):
 def addToRenderMenu(self, context):
 	self.layout.operator(
 		AutomaticTurntableOperator.bl_idname,
-		text = "Brick"
+		text = "Automatic Turntable"
 		)
 
 def register():
