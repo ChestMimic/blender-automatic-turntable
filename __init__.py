@@ -25,30 +25,38 @@ bl_info = {
 	"category":"Render",
 	"author":"Mark Fitzgibbon"
 }
-import bpy
+#Python imports
 import mathutils
 from math import radians
 
+#Blender Imports
+import bpy
 from bpy.props import IntProperty, FloatProperty, StringProperty
 
+#Local imports
 from . import BoundingBox
 from . import RadialPoints
 
 addons_keymap = []
 
-def fitCameraToBox(camera, box):
+def fitCameraToBox(camera, box, margin = 0.0):
 	data_cam = bpy.data.cameras[camera.name]
-	focalLength = data_cam.lens
+	focal = data_cam.lens
 
-	box_height = ((box.maximum[2] - box.midpoint[2])+(box.maximum[2] - box.midpoint[2]))
-	box_width_x = ((box.maximum[1] - box.midpoint[1])+(box.maximum[1] - box.midpoint[1]))
-	box_width_y = ((box.maximum[0] - box.midpoint[0])+(box.maximum[0] - box.midpoint[0]))
-
+	#Get X, Y, and Z bounding box lengths	
+	box_width_x = box.getAxisLength(0)
+	box_width_y = box.getAxisLength(1)
+	box_height = box.getAxisLength(2)
+	
 	sensorWidth = data_cam.sensor_width
 	sensorHeight = data_cam.sensor_height
 
-	cam_radius = ((focalLength * box_height*1000 )/sensorHeight)/1000
+	obj_dst = lambda n, m: ( (focal * n*1000 )/m)/1000 * (1+margin)
+	
+	cam_radius_h = obj_dst(box_height, sensorHeight)
+	cam_radius_w = obj_dst(max(box_width_x, box_width_y), sensorWidth)
 
+	return max(cam_radius_h, cam_radius_w)
 
 class Turntable:
 
@@ -64,19 +72,8 @@ class Turntable:
 		box = BoundingBox.BoundingBox(bpy.context.selected_objects)
 		self.orbit = RadialPoints.CircularPositioning(box.midpoint)
 
-		data_cam = bpy.data.cameras[self.camera.name]
-		focalLength = data_cam.lens
-		box_height = ((box.maximum[2] - box.midpoint[2])+(box.maximum[2] - box.midpoint[2]))
-		box_width_x = ((box.maximum[1] - box.midpoint[1])+(box.maximum[1] - box.midpoint[1]))
-		box_width_y = ((box.maximum[0] - box.midpoint[0])+(box.maximum[0] - box.midpoint[0]))
-
-		sensorHeight = data_cam.sensor_height
-
-		radius = max(box.maximum[0] - box.midpoint[0], box.maximum[1]-box.midpoint[1]) #Largest of either X or Y value
-		
-		cam_radius = radius + ((focalLength * box_height*1000 )/sensorHeight)/1000
-
-		self.orbit.tt_circular_coords = [cam_radius, 270]	#Angle 270 should translate to a Front view
+		#Set Radius and starting angle
+		self.orbit.tt_circular_coords = [fitCameraToBox(self.camera, box, 0), 270]	#Angle 270 should translate to a Front view
 
 		#List of all camera position/rotation comos in order
 		self.camera_atlas = []
@@ -94,8 +91,6 @@ class Turntable:
 		if self.camera is not bpy.context.scene.camera:
 			bpy.context.scene.camera = self.camera
 
-	def renderCurrentPosition(self):
-		pass
 
 	def setToIndexAndRender(self, index = 0):
 		#Set position and rotation of camera to position on list at index
@@ -111,8 +106,6 @@ class Turntable:
 		for cpos in self.camera_atlas:
 			self.setToIndexAndRender(index)
 			index += 1
-
-
 
 class AutomaticTurntableOperator(bpy.types.Operator):
 	bl_idname = "render.automatic_turntable"
@@ -131,15 +124,22 @@ class AutomaticTurntableOperator(bpy.types.Operator):
 		max = 360,
 		default = 90
 		)
+	#Space between most extreme edge and edge of image
+	margin = FloatProperty(
+		name = "Margin",
+		min = 0,
+		max = 1,
+		default = 0
+		)
+	#String name of camera
 	camera = StringProperty(
 		name="Camera"
 		)
+	#Filepath locaton to save renders
 	filepath = StringProperty(
 		name="File Path")
 
 	def invoke(self, context, event):
-		#self.iterations = iterations
-		#self.increments = increments
 		actScene = bpy.context.scene
 		self.camera =actScene.camera.name
 		self.filepath = bpy.data.scenes[actScene.name].render.filepath
@@ -158,15 +158,12 @@ def addToRenderMenu(self, context):
 		AutomaticTurntableOperator.bl_idname,
 		text = "Brick"
 		)
+
 def register():
-	#bpy.utils.register_class(OrbitalOperator)
 	bpy.utils.register_class(AutomaticTurntableOperator)
 	bpy.types.INFO_MT_render.append(addToRenderMenu)
 
-
-
 def unregister():
-	#bpy.utils.unregister_class(OrbitalOperator)
 	bpy.utils.unregister_class(AutomaticTurntableOperator)
 	bpy.types.INFO_MT_render.remove(addToRenderMenu)
 

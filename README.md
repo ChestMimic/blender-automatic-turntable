@@ -47,6 +47,10 @@ To Do
 - GUI interface
 - More iteration control
 
+Notes
+--------
+- http://photo.stackexchange.com/questions/12434/how-do-i-calculate-the-distance-of-an-object-in-a-photo
+
 Contact
 -------
 - [Github](https://github.com/ibbolia)

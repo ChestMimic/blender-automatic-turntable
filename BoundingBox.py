@@ -39,3 +39,6 @@ class BoundingBox:
 		self.minimum = (xMin, yMin, zMin)
 		self.maximum = (xMax, yMax, zMax)
 		self.midpoint = (xMid, yMid, zMid)
+
+	def getAxisLength(self, ax):
+		return self.maximum[ax] - self.minimum[ax]
