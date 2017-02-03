@@ -35,7 +35,7 @@ Usage
 --------
 Addon is accessible through Render>Automatic Turntable
 Automatic turntable will not manage render settings automaticaly
-User should confirm camera parameters (e.g. clipping, FOV)
+User should confirm camera parameters (e.g. clipping, FOV) befre execution
 
 User will be presented with a dialog box and the following parameters:
 - Iterations: The total amount of renders to be made
