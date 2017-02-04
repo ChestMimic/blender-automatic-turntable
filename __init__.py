@@ -71,11 +71,11 @@ class Turntable:
 		self.camera_rotation = (90, 0, 0)
 
 		#Set target center
-		box = BoundingBox.BoundingBox(bpy.context.selected_objects)
-		self.orbit = RadialPoints.CircularPositioning(box.midpoint)
+		self.box = BoundingBox.BoundingBox(bpy.context.selected_objects)
+		self.orbit = RadialPoints.CircularPositioning(self.box.midpoint)
 
 		#Set Radius and starting angle
-		self.orbit.tt_circular_coords = [fitCameraToBox(self.camera, box, 0), 270]	#Angle 270 should translate to a Front view
+		self.orbit.tt_circular_coords = [fitCameraToBox(self.camera, self.box, 0), 270]	#Angle 270 should translate to a Front view
 
 		#List of all camera position/rotation comos in order
 		self.camera_atlas = []
@@ -92,6 +92,8 @@ class Turntable:
 		#Activate requested camera if it isn't
 		if self.camera is not bpy.context.scene.camera:
 			bpy.context.scene.camera = self.camera
+
+		bpy.context.scene.camera.location[2] = self.box.midpoint[2]
 
 	def setToIndexAndRender(self, index = 0):
 		#Set position and rotation of camera to position on list at index
@@ -148,7 +150,7 @@ class AutomaticTurntableOperator(bpy.types.Operator):
 
 	def execute(self, context):
 		box = BoundingBox.BoundingBox(bpy.context.selected_objects)
-		ttb=Turntable(bpy.data.objects[self.camera], self.filepath, self.iterations, self.increments,  box.midpoint)
+		ttb=Turntable(bpy.data.objects[self.camera], self.filepath, self.iterations, self.increments)
 		ttb.renderAllPositions()
 		return {'FINISHED'}
 
