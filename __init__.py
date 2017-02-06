@@ -52,7 +52,7 @@ def fitCameraToBox(camera, box, margin = 0.0):
 	sensorWidth = data_cam.sensor_width
 	sensorHeight = data_cam.sensor_height
 
-	obj_dst = lambda n, m: ( (focal * n*1000 )/m)/1000 * (1+margin) + max(box_width_x, box_width_y)/2
+	obj_dst = lambda n, m: ( ((focal * n*1000 )/m)/1000 * (1+margin)) + max(box_width_x, box_width_y)/2
 	
 	#Determine necessary radii for fitting the whole image in
 	cam_radius_h = obj_dst(box_height, sensorHeight) 
@@ -111,6 +111,7 @@ class Turntable:
 			index += 1
 
 class AutomaticTurntableOperator(bpy.types.Operator):
+	# Interface with blender API to use Automatic Turntable
 	bl_idname = "render.automatic_turntable"
 	bl_label = "Automatic Turntable Renders"
 	bl_options = {'REGISTER', 'UNDO'}
@@ -143,13 +144,13 @@ class AutomaticTurntableOperator(bpy.types.Operator):
 		name="File Path")
 
 	def invoke(self, context, event):
+		# Call dialog box 
 		actScene = bpy.context.scene
 		self.camera =actScene.camera.name
 		self.filepath = bpy.data.scenes[actScene.name].render.filepath
 		return context.window_manager.invoke_props_dialog(self)
 
 	def execute(self, context):
-		box = BoundingBox.BoundingBox(bpy.context.selected_objects)
 		ttb=Turntable(bpy.data.objects[self.camera], self.filepath, self.iterations, self.increments)
 		ttb.renderAllPositions()
 		bpy.data.scenes[bpy.context.scene.name].render.filepath =  self.filepath

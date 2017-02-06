@@ -3,7 +3,11 @@ All notable changes will be tracked in this file
 
 ##[Unreleased]
 ###Changed
-Corrections to Readme
+- Corrections to Readme
+- Corrected Order of Operations on obj_dst lambda (__init__.py, line 55)
+
+###Removed
+- Extraneous BoundingBox call (__init__.py, line 152)
 
 ##[0.3.1] - 2017-02-05
 ###Added

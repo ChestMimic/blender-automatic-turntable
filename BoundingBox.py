@@ -1,5 +1,9 @@
 from mathutils import Vector
 
+class BBox:
+	def __init__(self, object):
+		pass
+
 class BoundingBox:
 	def __init__(self, lst=[]):
 		xMin = 9999999999999999999999

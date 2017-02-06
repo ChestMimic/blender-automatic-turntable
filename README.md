@@ -34,6 +34,8 @@ User wishing to install as and addon to blender should perform the following:
 Alternatively, User can install addon files directly in Blender's addon folder
 Add-on is only in "Testing" supported level
 
+User is not required to keep hidden git folder to run addon.
+
 Usage
 --------
 Addon is accessible through Render>Automatic Turntable
@@ -49,15 +51,6 @@ User will be presented with a dialog box and the following parameters:
 
 User can then press OK to start render process
 Note: There is no built in indicator for how much a render batch has progressed
-
-File Map
---------
-* __init__.py
-* BoundingBox.py
-* RadialPoints.py
-* README.md
-* CHANGELOG.md
-* LICENSE
 
 Notes
 --------
