@@ -8,7 +8,8 @@ Description
 -----------
 Automatically focus camera to rotate around a selected object in a scene.
 Will default to camera named "Camera", using render settings set for this camera.
-Script is provided as-is
+Script is provided as-is, under the GNU General Public License.
+Details can be located in the attached LICENSE file
 
 Download
 --------
@@ -23,10 +24,12 @@ Code is not intended nor designed to work as a standalone Python program.
 Install
 -------
 User wishing to install as and addon to blender should perform the following:
+
 1. Zip folder (if not already done) 
 2. Open Blender program
 3. Navigate to File > User Preferences > Add-ons
 4. Install from file
+5. Select Zip folder containing 
 
 Alternatively, User can install addon files directly in Blender's addon folder
 Add-on is only in "Testing" supported level
@@ -42,10 +45,19 @@ User will be presented with a dialog box and the following parameters:
 - Increments: The angle (in degrees) between iterations
 - Margin: Minimum amount of space (percent) between the object and edge of render
 - Camera: Name of Camera object to be utilized (defaults to Active)
-- File Pat: Directory renders will be saved to
+- File Path: Directory renders will be saved to
 
 User can then press OK to start render process
 Note: There is no built in indicator for how much a render batch has progressed
+
+File Map
+--------
+* __init__.py
+* BoundingBox.py
+* RadialPoints.py
+* README.md
+* CHANGELOG.md
+* LICENSE
 
 Notes
 --------

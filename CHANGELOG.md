@@ -1,6 +1,10 @@
 #Change Log
 All notable changes will be tracked in this file
 
+##[Unreleased]
+###Changed
+Corrections to Readme
+
 ##[0.3.1] - 2017-02-05
 ###Added
 - AutomaticTurntableOperator class (To replace Orbital Operator)
