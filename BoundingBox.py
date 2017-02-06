@@ -1,8 +1,29 @@
 from mathutils import Vector
+import math
 
 class BBox:
-	def __init__(self, object):
-		pass
+	def __init__(self, obj):
+		xMax = -math.inf
+		yMax = -math.inf
+		zMax = -math.inf
+
+		xMin = math.inf
+		yMin = math.inf
+		zMin = math.inf
+
+		self.mx = obj.matrix_world
+
+		for b in obj.bound_box:
+			xMax = max(xMax, b[0])
+			yMax = max(yMax, b[1])
+			zMax = max(zMax, b[2])
+
+			xMin = min(xMin, b[0])
+			yMin = min(yMin, b[1])
+			zMin = min(zMin, b[2])
+
+		self.mini = self.mx * Vector(xMin, yMin, zMin)
+		self.maxi = self.mx * Vector(xMax, yMax, zMax)
 
 class BoundingBox:
 	def __init__(self, lst=[]):
