@@ -1,6 +1,22 @@
 #Change Log
 All notable changes will be tracked in this file
 
+##[Unreleased]
+###Added
+- AutomaticTurntableOperator class (To replace Orbital Operator)
+- Turntable class (To replace Orbital)
+- Keymaps variable
+- AutomaticTurntableOperator UI via invoke_props_dialog
+
+###Changed
+- Register/Unregister takes effect on AutomaticTurntableOperator class
+- Radius calculation now uses camera's focal length and relative size of target
+- Filename string formats and uses correct extension string
+
+###Removed
+- Active code referencing Orbital class
+- Orbital Operator class
+
 ##[0.2.3] - 2017-01-16
 ###Fixed
 - Issue 7: Camera rotation points now do not exceed final position

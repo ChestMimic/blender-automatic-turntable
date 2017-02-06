@@ -1,6 +1,6 @@
 Automatic Turntable Addon
 ================
-Version 0.2.3
+Version 0.3.1
 -----------
 (c) Mark Fitzgibbon 2017
 
@@ -33,19 +33,23 @@ Add-on is only in "Testing" supported level
 
 Usage
 --------
-Select and center desired objects before running addon.
-Addon will iterate through front, side(Right), and rear view posiions.
+Addon is accessible through Render>Automatic Turntable
+Automatic turntable will not manage render settings automaticaly
+User should confirm camera parameters (e.g. clipping, FOV) befre execution
 
-Significant Known Issues
-------------
-- 6: Object with too much Y length cropped
-	- Addresses issue caused by Y length exceeding X length
-	- Suggested temporary workaround: No known workaround exists at this time
+User will be presented with a dialog box and the following parameters:
+- Iterations: The total amount of renders to be made
+- Increments: The angle (in degrees) between iterations
+- Margin: Minimum amount of space (percent) between the object and edge of render
+- Camera: Name of Camera object to be utilized (defaults to Active)
+- File Pat: Directory renders will be saved to
 
-To Do
+User can then press OK to start render process
+Note: There is no built in indicator for how much a render batch has progressed
+
+Notes
 --------
-- GUI interface
-- More iteration control
+- [Camera distance formula is dervied from this stackexchange page](http://photo.stackexchange.com/questions/12434/how-do-i-calculate-the-distance-of-an-object-in-a-photo)
 
 Contact
 -------

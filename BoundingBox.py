@@ -1,13 +1,13 @@
 from mathutils import Vector
 
 class BoundingBox:
-	def __init__(self, lst=[], globalPos = (0.0,0.0,0.0)):
-		xMin = None
-		xMax = None
-		yMin = None
-		yMax = None
-		zMin = None
-		zMax = None
+	def __init__(self, lst=[]):
+		xMin = 9999999999999999999999
+		xMax = -9999999999999999999999
+		yMin = 9999999999999999999999
+		yMax = -9999999999999999999999
+		zMin = 9999999999999999999999
+		zMax = -9999999999999999999999
 
 		#Obtain bounding box in an object's local space
 		for ob in lst:
@@ -15,7 +15,7 @@ class BoundingBox:
 				mat = ob.matrix_world
 				#loc, rot, scale = ob.matrix_world.decompose();
 
-				globalPos = lambda i: (Vector(b)*mat)[i]
+				globalPos = lambda i: (mat*Vector(b))[i]
 
 				if xMax is None or (globalPos(0) > xMax):
 					xMax = globalPos(0)
@@ -39,3 +39,7 @@ class BoundingBox:
 		self.minimum = (xMin, yMin, zMin)
 		self.maximum = (xMax, yMax, zMax)
 		self.midpoint = (xMid, yMid, zMid)
+		print(self.midpoint)
+
+	def getAxisLength(self, ax):
+		return self.maximum[ax] - self.minimum[ax]
