@@ -19,7 +19,7 @@
 bl_info = {
 	"name":"Automatic Turntable",
 	"description":"Automatically focus camera to rotate around a selected object in a scene",
-	"version":(0,3,0),
+	"version":(0,3,1),
 	"blender":(2,78,0),
 	"support":"TESTING",
 	"category":"Render",
@@ -152,6 +152,7 @@ class AutomaticTurntableOperator(bpy.types.Operator):
 		box = BoundingBox.BoundingBox(bpy.context.selected_objects)
 		ttb=Turntable(bpy.data.objects[self.camera], self.filepath, self.iterations, self.increments)
 		ttb.renderAllPositions()
+		bpy.data.scenes[bpy.context.scene.name].render.filepath =  self.filepath
 		return {'FINISHED'}
 
 def addToRenderMenu(self, context):

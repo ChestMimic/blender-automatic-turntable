@@ -1,6 +1,6 @@
 Automatic Turntable Addon
 ================
-Version 0.3
+Version 0.3.1
 -----------
 (c) Mark Fitzgibbon 2017
 
@@ -45,21 +45,11 @@ User will be presented with a dialog box and the following parameters:
 - File Pat: Directory renders will be saved to
 
 User can then press OK to start render process
-
-Significant Known Issues
-------------
-- 6: Object with too much Y length cropped
-	- Addresses issue caused by Y length exceeding X length
-	- Suggested temporary workaround: No known workaround exists at this time
-
-To Do
---------
-- GUI interface
-- More iteration control
+Note: There is no built in indicator for how much a render batch has progressed
 
 Notes
 --------
-- [Camera distance formula](http://photo.stackexchange.com/questions/12434/how-do-i-calculate-the-distance-of-an-object-in-a-photo)
+- [Camera distance formula is dervied from this stackexchange page](http://photo.stackexchange.com/questions/12434/how-do-i-calculate-the-distance-of-an-object-in-a-photo)
 
 Contact
 -------
