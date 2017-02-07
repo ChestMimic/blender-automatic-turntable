@@ -5,6 +5,7 @@ All notable changes will be tracked in this file
 ###Changed
 - Corrections to Readme
 - Corrected Order of Operations on obj_dst lambda (__init__.py, line 55)
+- Added reference to origin during Oribital position calculation
 
 ###Removed
 - Extraneous BoundingBox call (__init__.py, line 152)

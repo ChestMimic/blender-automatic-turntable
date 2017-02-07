@@ -18,8 +18,8 @@ class CircularPositioning:
 		return self.tt_circular_coords[0]
 
 	def getPointXYZ(self):
-		xPos = self.tt_circular_coords[0] * math.cos(radians(self.tt_circular_coords[1]))
-		yPos = self.tt_circular_coords[0] * math.sin(radians(self.tt_circular_coords[1]))
+		xPos = self.tt_circular_coords[0] * math.cos(radians(self.tt_circular_coords[1])) + self.tt_origin[0]
+		yPos = self.tt_circular_coords[0] * math.sin(radians(self.tt_circular_coords[1])) + self.tt_origin[1]
 		zPos = self.tt_origin[2]
 		return (xPos, yPos, zPos)
 
