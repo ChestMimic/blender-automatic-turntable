@@ -52,7 +52,7 @@ def fitCameraToBox(camera, box, margin = 0.0):
 	sensorWidth = data_cam.sensor_width
 	sensorHeight = data_cam.sensor_height
 
-	obj_dst = lambda n, m: ( ((focal * n*1000 )/m)/1000 * (1+margin)) + max(box_width_x, box_width_y)/2
+	obj_dst = lambda n, m: ((focal * n * 1000 )/m)/1000 + max(box_width_x, box_width_y)/2
 	
 	#Determine necessary radii for fitting the whole image in
 	cam_radius_h = obj_dst(box_height, sensorHeight) 
