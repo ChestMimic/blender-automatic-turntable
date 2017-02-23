@@ -32,7 +32,7 @@ from math import radians
 
 #Blender Imports
 import bpy
-from bpy.props import IntProperty, FloatProperty, StringProperty
+from bpy.props import IntProperty, FloatProperty, StringProperty, EnumProperty, PointerProperty
 
 #Local imports
 from . import BoundingBox
@@ -60,6 +60,13 @@ def fitCameraToBox(camera, box, margin = 0.0):
 
 	##Return the furthest (and best fitting) radius
 	return max(cam_radius_h, cam_radius_w)
+
+def camera_list_callback(scene, context):
+	lis = []
+	for obj in scene.objects:
+		if (obj.type == 'CAMERA'):
+			lis.append(obj.name )
+	return lis
 
 class Turntable:
 
@@ -138,16 +145,28 @@ class AutomaticTurntableOperator(bpy.types.Operator):
 	#String name of camera
 	camera = StringProperty(
 		name="Camera"
+		#options= camera_list_callback(bpy.context.scene, bpy.context)
 		)
 	#Filepath locaton to save renders
 	filepath = StringProperty(
 		name="File Path")
+
+	cameraList = EnumProperty(
+		name = "Cameras",
+		items=[],
+		update=camera_list_callback)
+	#Maybe use this? http://blender.stackexchange.com/questions/23356/populating-an-enumproperty-using-a-function
+
 
 	def invoke(self, context, event):
 		# Call dialog box 
 		actScene = bpy.context.scene
 		self.camera =actScene.camera.name
 		self.filepath = bpy.data.scenes[actScene.name].render.filepath
+		self.cameraList = EnumProperty(
+			name="Camera List",
+			items =   camera_list_callback(bpy.context.scene, bpy.context) )
+		
 		return context.window_manager.invoke_props_dialog(self)
 
 	def execute(self, context):
